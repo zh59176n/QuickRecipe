@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "457959190468",
+    "project_id": "quickrecipe-16168",
+    "storage_bucket": "quickrecipe-16168.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457959190468:android:e5fccd90ee5a28c618be91",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUcvZe4BHjnVZP-31CyMiJ8Dlgz9B96qY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

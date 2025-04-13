@@ -3,45 +3,71 @@ package com.example.myapplication
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
 import com.example.myapplication.ui.theme.MyApplicationTheme
+
+sealed class Screen(val route: String) {
+    object Login : Screen("login")
+    object Register : Screen("register")
+    object Home : Screen("home")
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             MyApplicationTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+
+                Surface(color = MaterialTheme.colorScheme.background) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.Login.route
+                    ) {
+                        composable(Screen.Login.route) {
+                            LoginScreen(
+                                onLoginSuccess = {
+                                    navController.navigate(Screen.Home.route) {
+                                        popUpTo(Screen.Login.route) { inclusive = true }
+                                    }
+                                },
+                                onGoToRegister = {
+                                    navController.navigate(Screen.Register.route)
+                                }
+                            )
+                        }
+
+                        composable(Screen.Register.route) {
+                            RegisterScreen(
+                                onRegisterSuccess = {
+                                    navController.navigate(Screen.Home.route) {
+                                        popUpTo(Screen.Register.route) { inclusive = true }
+                                    }
+                                },
+                                onGoToLogin = {
+                                    navController.navigate(Screen.Login.route)
+                                }
+                            )
+                        }
+
+                        composable(Screen.Home.route) {
+                            val sampleRecipes = listOf(
+                                Recipe("Retro Burger", R.drawable.sample_recipe),
+                                Recipe("Creamy Ramen", R.drawable.sample_recipe),
+                                Recipe("Golden Waffles", R.drawable.sample_recipe)
+                            )
+
+                            HomeScreen(
+                                featuredRecipes = sampleRecipes,
+                                onRecipeClick = { /* TODO: Open detail */ }
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyApplicationTheme {
-        Greeting("Android")
     }
 }
